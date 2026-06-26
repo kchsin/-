@@ -268,6 +268,27 @@
 .fsx-download-size { color: var(--text-tertiary); font-weight: 400; font-size: 11px; }
 .fsx-download-done { color: var(--success) !important; border-color: var(--success) !important; }
 
+
+/* ---------- Pro refinement blocks ---------- */
+.fsx-card-meta { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 12px; }
+.fsx-chip { font-size:10.5px; padding:4px 7px; border-radius:999px; border:1px solid var(--line); color:var(--text-secondary); background:rgba(255,255,255,0.03); white-space:nowrap; }
+.fsx-chip.good { color:var(--success); border-color:rgba(79,190,130,.35); background:rgba(79,190,130,.08); }
+.fsx-chip.warn { color:#FFD166; border-color:rgba(255,209,102,.35); background:rgba(255,209,102,.08); }
+.fsx-chip.bad { color:var(--danger); border-color:rgba(224,88,76,.35); background:rgba(224,88,76,.08); }
+.fsx-tagline { font-size:12.5px; color:var(--text-primary); line-height:1.5; margin:0 0 8px; }
+.fsx-section { margin-top:18px; border-top:1px solid var(--line); padding-top:14px; }
+.fsx-section-title { font-size:12px; color:var(--text-tertiary); letter-spacing:.08em; font-weight:800; margin-bottom:9px; }
+.fsx-signal-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.fsx-signal { background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:8px; padding:8px; }
+.fsx-signal-k { font-size:10.5px; color:var(--text-tertiary); margin-bottom:4px; }
+.fsx-signal-v { font-size:12px; line-height:1.45; color:var(--text-primary); }
+.fsx-track-list { margin:0; padding-left:18px; color:var(--text-primary); font-size:12.5px; line-height:1.65; }
+.fsx-mini-meta { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 4px; }
+.fsx-mini-box { background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:8px; padding:8px; }
+.fsx-mini-box b { display:block; font-size:10.5px; color:var(--text-tertiary); margin-bottom:3px; }
+.fsx-mini-box span { font-size:12.5px; color:var(--text-primary); }
+.fsx-source { font-size:11px; color:var(--text-tertiary); line-height:1.55; }
+
 /* ---------- Scrollbars ---------- */
 .fsx-grid::-webkit-scrollbar, .fsx-detail::-webkit-scrollbar { width: 8px; }
 .fsx-grid::-webkit-scrollbar-thumb, .fsx-detail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
@@ -293,7 +314,7 @@
   <div class="fsx-topbar">
     <div class="fsx-topbar-left">
       <span class="fsx-glyph">◈</span>
-      <span class="fsx-title">五星拆分法 <span class="fsx-title-sub">個股交易所</span></span>
+      <span class="fsx-title">五星拆分法 <span class="fsx-title-sub">個股交易所 Pro</span></span>
     </div>
     <div class="fsx-topbar-right">
       <div class="fsx-stat"><span class="fsx-stat-num" id="stat-count">5</span><span class="fsx-stat-label">已分析</span></div>
@@ -316,7 +337,7 @@
     </div>
   </div>
 
-  <div class="fsx-notice" id="fsx-notice" hidden></div>
+  <div class="fsx-notice" id="fsx-notice">Pro 版新增：一句話定位、風險標籤、★4 四燈號、投資人類型、下一次追蹤重點。資料僅供學習與研究，不構成投資建議。</div>
 
   <div class="fsx-body">
     <div class="fsx-grid" id="fsx-grid"></div>
@@ -552,6 +573,67 @@ let STOCKS = [
     ],
     verdict: "本系列最高分案例，但目標價區間從4890到8000元的離散度本身就是警訊",
   },
+
+  {
+    code: "3131", name: "弘塑", market: "上櫃",
+    updated: "2026-06-26",
+    breakdown: [
+      { v: 1,   t: "商業模式 — 濕製程與半導體設備，受惠先進封裝、HBM 與 CoWoS 擴產需求" },
+      { v: 1,   t: "財務健康度 — 2026 Q1 EPS 16.11 元，營收年增且獲利成長明確" },
+      { v: 0.5, t: "產業競爭位置 — 具先進封裝設備利基，但仍需面對大型設備廠與驗收週期" },
+      { v: 0,   t: "估值買進時機 — 股價已大幅反映題材，需防本益比與籌碼過熱" },
+      { v: 1,   t: "資本投入策略 — 二期新廠、外租廠房與擴大招募支撐產能擴張" },
+    ],
+    verdict: "基本面與題材都強，但股價已先反映很多樂觀預期，適合追蹤不適合盲目追高",
+  },
+  {
+    code: "3711", name: "日月光投控", market: "上市",
+    updated: "2026-06-26",
+    breakdown: [
+      { v: 1,   t: "商業模式 — 全球封測龍頭，封裝測試＋電子代工雙引擎" },
+      { v: 1,   t: "財務健康度 — 2026 Q1 EPS 3.24 元、年增明顯，5 月營收年增近三成" },
+      { v: 1,   t: "產業競爭位置 — 先進封裝與封測規模優勢明確，是 AI 晶片供應鏈關鍵角色" },
+      { v: 0.5, t: "估值買進時機 — 基本面強但短線股價與法人籌碼波動，買點需保守" },
+      { v: 1,   t: "資本投入策略 — 上修先進封測與資本支出，擴產方向與 AI 需求一致" },
+    ],
+    verdict: "五支裡最像核心型標的，基本面強、規模大，但短線仍要看估值與法人是否續買",
+  },
+  {
+    code: "2753", name: "八方雲集", market: "上市",
+    updated: "2026-06-26",
+    breakdown: [
+      { v: 1,   t: "商業模式 — 鍋貼水餃、牛肉麵與冷凍商品，連鎖餐飲＋食品製造邏輯清楚" },
+      { v: 1,   t: "財務健康度 — 2026 Q1 EPS 3.56 元創高，5 月營收年增 13.34%" },
+      { v: 0.5, t: "產業競爭位置 — 品牌與門市規模有優勢，但餐飲競爭激烈、護城河非壟斷" },
+      { v: 0.5, t: "估值買進時機 — 本益比約十多倍不算誇張，但成長速度屬穩健型" },
+      { v: 1,   t: "資本投入策略 — 門市展店、中央工廠、冷凍商品與多品牌布局可支持長期複製" },
+    ],
+    verdict: "比全家餐飲更成熟、流動性較好；重點不是爆發力，而是展店品質與成本控制",
+  },
+  {
+    code: "2727", name: "王品", market: "上市",
+    updated: "2026-06-26",
+    breakdown: [
+      { v: 1,   t: "商業模式 — 多品牌餐飲集團，台灣與中國雙市場經營模式清楚" },
+      { v: 1,   t: "財務健康度 — 2026 Q1 營收與 EPS 創單季新高，5 月營收年增 15.02%" },
+      { v: 0.5, t: "產業競爭位置 — 餐飲龍頭品牌組合強，但消費景氣、人力與租金仍是限制" },
+      { v: 0.5, t: "估值買進時機 — PE 約十多倍合理，但目標價與股價需確認是否已反映樂觀預期" },
+      { v: 1,   t: "資本投入策略 — 多品牌展店與中國事業改善提供中期成長動能" },
+    ],
+    verdict: "餐飲龍頭基本面穩，適合拿來當 7708 與 2753 的同業基準；但要盯成本與中國事業延續性",
+  },
+  {
+    code: "3037", name: "欣興", market: "上市",
+    updated: "2026-06-26",
+    breakdown: [
+      { v: 1,   t: "商業模式 — PCB 與 IC 載板，受惠 AI 伺服器與 ABF 載板需求" },
+      { v: 1,   t: "財務健康度 — 2026 Q1 EPS 3.28 元創 13 季新高，5 月營收年增 32.37%" },
+      { v: 0.5, t: "產業競爭位置 — 高階載板受惠 AI，但仍屬景氣循環產業，同業與價格循環要留意" },
+      { v: 0.5, t: "估值買進時機 — 營收與 EPS 轉強，但短線投信賣超與股價回檔，買點需等待確認" },
+      { v: 1,   t: "資本投入策略 — 現增、可轉債與 GDR 籌資支援高階載板擴張" },
+    ],
+    verdict: "AI 載板復甦明確，但它是景氣循環股，不是只要營收年增就能追價",
+  }
 ];
 
 // 把內建 DOCS_DATA 的檔名/大小資訊附加到對應股票物件上，讓 detailHtml 可以同步讀取
@@ -564,6 +646,177 @@ STOCKS.forEach(s => {
 });
 
 const SEED_DOCS_DATA = JSON.parse(JSON.stringify(DOCS_DATA));
+
+
+// ============ Pro 版補充資料：定位、風險、★4四燈號、下一次追蹤 ============
+const PRO_DATA = {
+
+  "3131": {
+    tagline: "先進封裝設備題材最強之一，但股價已反映高度期待；重點是 EPS 能否持續跟上估值。",
+    investorType: "高成長但估值警示型",
+    liquidity: { text: "中高", level: "good" },
+    riskTags: [{text:"先進封裝",level:"good"},{text:"估值偏高",level:"bad"},{text:"驗收週期",level:"warn"}],
+    signals: { pe:"高估值區，需等獲利續強確認", chip:"題材股籌碼波動大", target:"目標價需防追價", liquidity:"成交活絡但波動高" },
+    next: ["追蹤 Q2/Q3 EPS 是否延續 Q1 強度", "觀察月營收是否重新轉強", "檢查擴產、招募與新廠滿載是否轉化為毛利率"],
+    sources:"<b>5筆來源：</b><br>1. 月營收：2026/5營收5.59億、月增4.23%、年增7.17%。<br>2. 財務：2026 Q1 EPS 16.11元、年增84%。<br>3. 估值：市場資料顯示高本益比區，股價位階偏高。<br>4. 產業：先進封裝/PLP設備需求是主要成長故事。<br>5. 籌碼/風險：題材強但籌碼波動大，需追蹤法人是否續買。"
+  },
+  "3711": {
+    tagline: "全球封測龍頭，AI 先進封裝需求帶動營收與獲利；五支裡最接近核心持股觀察型。",
+    investorType: "大型核心成長型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"封測龍頭",level:"good"},{text:"AI封裝",level:"good"},{text:"法人波動",level:"warn"}],
+    signals: { pe:"需與全年 EPS 預估比對", chip:"近短期法人有分歧", target:"若持續上修才加分", liquidity:"流動性佳" },
+    next: ["追蹤先進封測營收占比與毛利率", "觀察資本支出上修是否帶來明確回收", "比對投信與外資是否由分歧轉一致"],
+    sources:"<b>5筆來源：</b><br>1. 月營收：2026/5營收630.33億、年增28.57%，1-5月年增19.87%。<br>2. 財務：2026 Q1 EPS 3.24元，首季獲利明顯改善。<br>3. 估值：WantGoo/Histock顯示本益比已明顯上升，需用全年EPS驗證。<br>4. 籌碼：近短期三大法人資料出現分歧，投信調節需留意。<br>5. 產業/資本投入：LEAP/先進封測營收與資本支出上修，AI封裝需求是核心。"
+  },
+  "2753": {
+    tagline: "成熟連鎖餐飲與食品製造結合，成長穩定但不是高速題材股。",
+    investorType: "穩健餐飲成長型",
+    liquidity: { text: "中高", level: "good" },
+    riskTags: [{text:"EPS創高",level:"good"},{text:"餐飲成本",level:"warn"},{text:"穩健成長",level:"good"}],
+    signals: { pe:"約十多倍，估值中性", chip:"需追蹤法人續航", target:"目標價資料不宜過度依賴", liquidity:"較 7708 佳" },
+    next: ["追蹤同店銷售與展店品質", "觀察食材、人力與租金成本", "檢查冷凍商品與中央工廠效益"],
+    sources:"<b>5筆來源：</b><br>1. 月營收：2026/5合併營收8億元、年增13.34%。<br>2. 財務：2026 Q1 EPS 3.56元，2025 EPS 12.84元、獲利創高。<br>3. 估值：本益比約12.7–13.9倍，估值屬中性偏合理。<br>4. 籌碼：6月法人/主力有回流跡象，但需看續航。<br>5. 同業：與全家餐飲、王品比較，八方更成熟且流動性較佳。"
+  },
+  "2727": {
+    tagline: "餐飲龍頭，Q1 創高且中國事業改善；適合作為餐飲股估值基準。",
+    investorType: "成熟餐飲龍頭型",
+    liquidity: { text: "中高", level: "good" },
+    riskTags: [{text:"餐飲龍頭",level:"good"},{text:"成本壓力",level:"warn"},{text:"中國事業",level:"warn"}],
+    signals: { pe:"約十多倍，合理但非低估", chip:"法人買賣需續看", target:"目標價需檢查是否已反映", liquidity:"流動性正常" },
+    next: ["追蹤台灣展店與中國事業獲利延續性", "觀察節慶後營收是否回落", "檢查毛利率是否受成本壓力侵蝕"],
+    sources:"<b>5筆來源：</b><br>1. 月營收：2026/5營收23.59億、月增22.42%、年增15.02%。<br>2. 財務：2026 Q1營收65.2億、EPS 5.04元，創單季新高。<br>3. 估值：PE約十多倍，適合作餐飲同業估值基準。<br>4. 籌碼：5月初外資買超、三大法人合計偏買超，但後續需追蹤。<br>5. 同業：可作7708全家餐飲與2753八方雲集的餐飲龍頭基準。"
+  },
+  "3037": {
+    tagline: "AI 載板復甦明確，但 PCB/ABF 是景氣循環產業，不能只用單季爆發判斷長期。",
+    investorType: "景氣循環復甦型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"AI載板",level:"good"},{text:"投信賣超",level:"warn"},{text:"景氣循環",level:"warn"}],
+    signals: { pe:"需看 2026 EPS 是否真正跳升", chip:"短期投信賣超需留意", target:"預估上修但波動高", liquidity:"流動性佳" },
+    next: ["追蹤 ABF 載板供需缺口是否延續", "觀察 GDR/現增後資本使用效率", "檢查三大法人是否停止調節"],
+    sources:"<b>5筆來源：</b><br>1. 財務：2026 Q1 EPS約3.2–3.28元，年增率高。<br>2. 營收：Q1營收374.5億、年增24.5%，4月營收年增27.6%。<br>3. 估值：WantGoo顯示2026/6 PE升高，股價對復甦預期已提前反映。<br>4. 籌碼：5月中外資調節但投信買超，法人結構需觀察。<br>5. 產業/同業：AI、EFB、ABF載板需求為主軸，可與日月光、力成等供應鏈比較。"
+  },
+
+  "7708": {
+    tagline: "穩定展店＋集團資源的餐飲成長股；重點不是估值過熱，而是成交量與自由流通籌碼偏低。",
+    investorType: "穩健成長觀察型",
+    liquidity: { text: "偏低", level: "warn" },
+    riskTags: [{text:"低流動性",level:"warn"},{text:"餐飲成本",level:"warn"},{text:"估值合理",level:"good"}],
+    signals: { pe:"10x-14x 中低區間", chip:"法人參與度低，方向中性", target:"目標價資料不足", liquidity:"低成交量是主要風險" },
+    next: ["追蹤同店銷售、展店品質與新店培養期", "檢查毛利率是否受人力、租金、食材成本壓力影響", "觀察成交量、股東人數、法人研究覆蓋是否改善"],
+    sources:"公開資訊觀測站、公司公告、Goodinfo、五星分析報告與流動性改善建議書。"
+  },
+  "5443": {
+    tagline: "半導體設備轉型方向清楚，但 EPS 與月營收確認不足；題材強，不代表追價安全。",
+    investorType: "題材成長但估值警示型",
+    liquidity: { text: "正常偏波動", level: "warn" },
+    riskTags: [{text:"估值偏高",level:"bad"},{text:"法人退潮",level:"bad"},{text:"先進封裝題材",level:"good"}],
+    signals: { pe:"近十年偏上緣，高於30倍河流線", chip:"近月三大法人淨賣超", target:"目標價未形成領先定價", liquidity:"題材股波動較大" },
+    next: ["追蹤 EPS 是否回升，而不是只看營收或題材", "觀察月營收是否恢復連續成長", "檢查法人是否停止賣超、PER 是否回到合理區間"],
+    sources:"公開資訊觀測站、公司公告、Goodinfo、五星分析報告。"
+  },
+  "2330": {
+    tagline: "世界級好公司，但買點要看估值與創高後籌碼；好公司不等於任何價格都能買。",
+    investorType: "核心資產但需等合理價型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"高品質",level:"good"},{text:"估值壓力",level:"warn"},{text:"籌碼敏感",level:"warn"}],
+    signals: { pe:"高於過熱門檻需保守", chip:"創高後震盪需追蹤", target:"目標價需與股價時間序列比對", liquidity:"流動性佳" },
+    next: ["追蹤先進製程與毛利率", "比對外資目標價上修是否領先股價", "等待本益比回到較合理區間"],
+    sources:"公開資訊觀測站、Goodinfo、券商公開資料、公司法說。"
+  },
+  "2303": {
+    tagline: "成熟製程晶圓代工，基本面較穩，但成長力與先進製程龍頭不同。",
+    investorType: "價值修復觀察型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"外資累積",level:"good"},{text:"成長較慢",level:"warn"},{text:"景氣循環",level:"warn"}],
+    signals: { pe:"不算極端", chip:"半年期外資有累積", target:"需確認是否主動上修", liquidity:"流動性佳" },
+    next: ["追蹤成熟製程需求與稼動率", "確認現金流與股利政策", "觀察英特爾合作進度"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "2454": {
+    tagline: "AI 與車用故事有吸引力，但估值與法人方向分歧，需等獲利確認。",
+    investorType: "轉型題材觀察型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"高本益比",level:"bad"},{text:"法人分歧",level:"warn"},{text:"新故事未放大",level:"warn"}],
+    signals: { pe:"偏高", chip:"法人方向分歧", target:"需看上修是否有效", liquidity:"流動性佳" },
+    next: ["追蹤新產品營收占比", "檢查 EPS 是否恢復成長", "觀察法人籌碼是否轉一致"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "1513": {
+    tagline: "電力設備基本面強，但外資與投信方向分歧，買點需更重視籌碼。",
+    investorType: "基本面強但籌碼分歧型",
+    liquidity: { text: "中高", level: "good" },
+    riskTags: [{text:"訂單支撐",level:"good"},{text:"外資減碼",level:"warn"},{text:"投信追買",level:"warn"}],
+    signals: { pe:"不算過熱", chip:"外資減碼、投信買進", target:"需確認是否追價", liquidity:"交易活絡" },
+    next: ["追蹤嘉義新廠投產", "檢查訂單轉營收速度", "觀察外資是否停止減碼"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "3689": {
+    tagline: "高速連接器題材具體，但機構覆蓋不足，最好先當觀察股。",
+    investorType: "小型題材觀察型",
+    liquidity: { text: "中低", level: "warn" },
+    riskTags: [{text:"機構驗證低",level:"warn"},{text:"獲利未跟上",level:"warn"},{text:"高速連接器",level:"good"}],
+    signals: { pe:"不算過熱", chip:"投信幾乎未參與", target:"目標價資訊真空", liquidity:"需注意進出成本" },
+    next: ["確認 EPS 是否跟上營收", "追蹤 800G/1.6T 出貨進度", "等待更多法人或券商覆蓋"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "2467": {
+    tagline: "先進封裝設備基本面扎實，但估值墊高速度快，安全邊際變薄。",
+    investorType: "高成長但估值警示型",
+    liquidity: { text: "中高", level: "good" },
+    riskTags: [{text:"基本面強",level:"good"},{text:"估值快速墊高",level:"bad"},{text:"籌碼分歧",level:"warn"}],
+    signals: { pe:"短期墊高快", chip:"外資投信方向分歧", target:"需看是否領先定價", liquidity:"交易活絡" },
+    next: ["追蹤先進封裝訂單能見度", "觀察本益比是否降溫", "比對同業是否同步重估"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "2327": {
+    tagline: "被動元件龍頭，特規品升級是亮點，但目標價追漲速度要小心。",
+    investorType: "景氣循環＋規格升級型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"特規品提升",level:"good"},{text:"目標價追漲",level:"warn"},{text:"估值偏高",level:"bad"}],
+    signals: { pe:"逼近歷史高值", chip:"需追蹤法人是否續買", target:"目標價上修可能落後股價", liquidity:"流動性佳" },
+    next: ["追蹤 BB Ratio 與毛利率", "檢查特規品占比是否持續提升", "觀察目標價與股價是否再度背離"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "3017": {
+    tagline: "AI 散熱需求強，但目標價上修與股價反應背離，需尊重市場價格。",
+    investorType: "高成長但價格背離型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"營收強",level:"good"},{text:"股價背離",level:"warn"},{text:"同業同步受惠",level:"warn"}],
+    signals: { pe:"需與成長率一起看", chip:"籌碼賣超需留意", target:"目標價上修不等於立即上漲", liquidity:"流動性佳" },
+    next: ["追蹤液冷產品與水冷板擴產", "觀察毛利率是否維持", "比對目標價與股價反應"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  },
+  "6669": {
+    tagline: "本系列高分案例，但目標價區間離散度大，代表市場對未來假設差距很大。",
+    investorType: "高品質高成長型",
+    liquidity: { text: "高", level: "good" },
+    riskTags: [{text:"高分案例",level:"good"},{text:"客戶集中",level:"warn"},{text:"目標價分歧",level:"warn"}],
+    signals: { pe:"相對歷史與同業偏低", chip:"需追蹤法人持續性", target:"目標價分歧大", liquidity:"流動性佳" },
+    next: ["追蹤 ASIC 伺服器需求", "觀察客戶集中風險", "檢查北美雙基地進度至 2028 年"],
+    sources:"公開資訊觀測站、Goodinfo、公司公告。"
+  }
+};
+
+STOCKS.forEach(s => Object.assign(s, PRO_DATA[s.code] || {
+  tagline: s.verdict,
+  investorType: "一般觀察型",
+  liquidity: { text: "待確認", level: "warn" },
+  riskTags: [{text:"待補資料",level:"warn"}],
+  signals: { pe:"待確認", chip:"待確認", target:"待確認", liquidity:"待確認" },
+  next: ["補齊估值、籌碼、目標價與流動性資料"],
+  sources:"公開資料與五星分析報告。"
+}));
+
+function chipHtml(chip) {
+  return `<span class="fsx-chip ${chip.level || ''}">${chip.text}</span>`;
+}
+
+function signalBlockHtml(stock) {
+  const s = stock.signals || {};
+  const rows = [["本益比",s.pe],["法人籌碼",s.chip],["目標價",s.target],["流動性",s.liquidity]];
+  return `<div class="fsx-signal-grid">${rows.map(([k,v]) => `<div class="fsx-signal"><div class="fsx-signal-k">${k}</div><div class="fsx-signal-v">${v || '待確認'}</div></div>`).join('')}</div>`;
+}
 
 // ============ 渲染邏輯 ============
 
@@ -618,6 +871,12 @@ function cardHtml(stock) {
       </div>
       <div class="fsx-name">${stock.name} · ${stock.market}</div>
       <div class="fsx-stars">${renderStars(total, tier)}</div>
+      <div class="fsx-tagline">${stock.tagline || stock.verdict}</div>
+      <div class="fsx-card-meta">
+        ${chipHtml({text: stock.investorType || "觀察型", level: ""})}
+        ${chipHtml({text: "流動性：" + (stock.liquidity?.text || "待確認"), level: stock.liquidity?.level || ""})}
+        ${(stock.riskTags || []).slice(0,2).map(chipHtml).join("")}
+      </div>
       <div class="fsx-verdict">${stock.verdict}</div>
     </div>
   `;
@@ -637,6 +896,12 @@ function detailHtml(stock) {
       <div class="fsx-detail-name">${stock.name} · ${stock.market}</div>
       <div class="fsx-detail-stars">${renderStars(total, tier)}</div>
       <div class="fsx-detail-total">總評分 <b>${total} / 5</b></div>
+      <div class="fsx-tagline">${stock.tagline || stock.verdict}</div>
+      <div class="fsx-mini-meta">
+        <div class="fsx-mini-box"><b>投資人類型</b><span>${stock.investorType || "觀察型"}</span></div>
+        <div class="fsx-mini-box"><b>流動性</b><span>${stock.liquidity?.text || "待確認"}</span></div>
+      </div>
+      <div class="fsx-card-meta">${(stock.riskTags || []).map(chipHtml).join("")}</div>
 
       ${stock.breakdown.map((b, i) => `
         <div class="fsx-breakdown-row">
@@ -645,6 +910,21 @@ function detailHtml(stock) {
           <span class="fsx-bd-score" data-v="${b.v}">${b.v}</span>
         </div>
       `).join("")}
+
+      <div class="fsx-section">
+        <div class="fsx-section-title">★4 四項驗證燈號</div>
+        ${signalBlockHtml(stock)}
+      </div>
+
+      <div class="fsx-section">
+        <div class="fsx-section-title">下一次追蹤重點</div>
+        <ul class="fsx-track-list">${(stock.next || []).map(x => `<li>${x}</li>`).join("")}</ul>
+      </div>
+
+      <div class="fsx-section">
+        <div class="fsx-section-title">資料透明度</div>
+        <div class="fsx-source">${stock.sources || "公開資料與五星分析報告。"}</div>
+      </div>
 
       <div class="fsx-updated">最後更新：${stock.updated}</div>
       ${hasDoc ? `
@@ -706,9 +986,17 @@ async function triggerDownload(code) {
     grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-tertiary); padding:40px 0; font-size:13px;">讀取已儲存的股票資料…</div>`;
     const saved = await storageGet("stocks-list");
     if (saved && Array.isArray(saved) && saved.length > 0) {
-      STOCKS = saved;
+      // 若使用者之前已存過交易所資料，將新版內建股票以 code 合併進來，避免新卡片被舊快取蓋掉。
+      const merged = [...saved];
+      for (const seed of STOCKS) {
+        const idx = merged.findIndex(x => x.code === seed.code);
+        if (idx >= 0) merged[idx] = Object.assign({}, seed, merged[idx]);
+        else merged.push(seed);
+      }
+      STOCKS = merged;
+      await storageSet("stocks-list", STOCKS);
     } else {
-      // 第一次使用：把內建的 5 支股票種子寫進儲存空間
+      // 第一次使用：把內建股票種子寫進儲存空間
       await storageSet("stocks-list", STOCKS);
       for (const code of Object.keys(SEED_DOCS_DATA)) {
         await storageSet("doc:" + code, SEED_DOCS_DATA[code]);
