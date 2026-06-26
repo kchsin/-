@@ -617,7 +617,7 @@ let STOCKS = [
       { v: 1,   t: "商業模式 — 多品牌餐飲集團，台灣與中國雙市場經營模式清楚" },
       { v: 1,   t: "財務健康度 — 2026 Q1 營收與 EPS 創單季新高，5 月營收年增 15.02%" },
       { v: 0.5, t: "產業競爭位置 — 餐飲龍頭品牌組合強，但消費景氣、人力與租金仍是限制" },
-      { v: 0.5, t: "估值買進時機 — PE 約十多倍合理，但目標價與股價需確認是否已反映樂觀預期" },
+      { v: 0.5, t: "估值買進時機 — PE 約十多倍合理，但目標價與股價需比對是否已反映樂觀預期" },
       { v: 1,   t: "資本投入策略 — 多品牌展店與中國事業改善提供中期成長動能" },
     ],
     verdict: "餐飲龍頭基本面穩，適合拿來當 7708 與 2753 的同業基準；但要盯成本與中國事業延續性",
@@ -629,7 +629,7 @@ let STOCKS = [
       { v: 1,   t: "商業模式 — PCB 與 IC 載板，受惠 AI 伺服器與 ABF 載板需求" },
       { v: 1,   t: "財務健康度 — 2026 Q1 EPS 3.28 元創 13 季新高，5 月營收年增 32.37%" },
       { v: 0.5, t: "產業競爭位置 — 高階載板受惠 AI，但仍屬景氣循環產業，同業與價格循環要留意" },
-      { v: 0.5, t: "估值買進時機 — 營收與 EPS 轉強，但短線投信賣超與股價回檔，買點需等待確認" },
+      { v: 0.5, t: "估值買進時機 — 營收與 EPS 轉強，但短線投信賣超與股價回檔，買點需等資料不足" },
       { v: 1,   t: "資本投入策略 — 現增、可轉債與 GDR 籌資支援高階載板擴張" },
     ],
     verdict: "AI 載板復甦明確，但它是景氣循環股，不是只要營收年增就能追價",
@@ -1023,15 +1023,126 @@ const PRO_DATA = {
       "高價股回檔時成交量是否失控。"
     ],
     "sources": "<b>5項資料來源檢查：</b><br>1. 月營收：2026/5營收840.5億，年增18.2%；累計年增45%<br>2. 最新季報/財報：2026 Q1 EPS 75.95元，創同期高<br>3. Goodinfo/估值：股價4545元、PE約15.24倍<br>4. 法人籌碼：大型高價AI股，法人資金影響明顯<br>5. 同業比較：緯創、廣達、英業達、鴻海"
+
+  },
+  "3131": {
+    "tagline": "先進封裝濕製程設備受惠明確，Q1 EPS 強，但股價與估值已高度反映樂觀預期。",
+    "investorType": "高成長高估值觀察型",
+    "liquidity": { "text": "中高", "level": "good" },
+    "riskTags": [
+      {"text":"高價股波動", "level":"bad"},
+      {"text":"估值壓力", "level":"bad"},
+      {"text":"驗收週期", "level":"warn"}
+    ],
+    "signals": {
+      "pe": "PE約60倍以上；屬高成長高期待評價",
+      "chip": "高價設備股，法人與主力資金波動需每日追蹤",
+      "target": "有券商/市場樂觀預估，但股價已大幅反映，目標價需防追價性質",
+      "liquidity": "中高；成交活絡但高價股單筆進出成本高"
+    },
+    "next": [
+      "Q2/Q3 EPS 是否能接續 Q1 高成長，而非只靠一次性業外收益。",
+      "二期新廠、外租廠與招募是否實際轉成出貨與驗收。",
+      "高本益比下，若月營收放緩或法人轉賣，股價修正幅度可能放大。"
+    ],
+    "sources": "<b>5項資料來源檢查：</b><br>1. 月營收：2026/5營收約5.59億，年增約7.17%<br>2. 最新季報/財報：2026 Q1 EPS 16.11元，營收約15.96億<br>3. 估值：市場資訊顯示PE約60倍以上，PB偏高<br>4. 法人籌碼：高價設備股，需追蹤外資與投信是否續買<br>5. 同業比較：志聖、均豪、均華、辛耘等先進封裝設備鏈"
+  },
+  "3711": {
+    "tagline": "全球封測龍頭，AI先進封裝帶動營收與EPS改善；但股價快速重估後需看法人續航。",
+    "investorType": "核心封測成長型",
+    "liquidity": { "text": "高", "level": "good" },
+    "riskTags": [
+      {"text":"股價重估快", "level":"warn"},
+      {"text":"封測循環", "level":"warn"},
+      {"text":"高成交量", "level":"good"}
+    ],
+    "signals": {
+      "pe": "WantGoo顯示約50倍；若用全年EPS預估則需另估 forward PE",
+      "chip": "大型權值封測股，外資與投信資金影響大；需追蹤近一月淨買賣超",
+      "target": "先進封裝成長預期強，但目標價與股價上修需比對先後順序",
+      "liquidity": "高；Yahoo資料顯示單日成交量可達數萬張、成交金額大"
+    },
+    "next": [
+      "先進封裝營收占比與毛利率是否繼續提升。",
+      "股價創高時法人是否仍是淨買超，而非高檔換手。",
+      "EMS與封測雙引擎是否同步改善，不只靠題材重估。"
+    ],
+    "sources": "<b>5項資料來源檢查：</b><br>1. 月營收：2026/4營收約622.47億，年增約19.22%；3月營收年增約18.19%<br>2. 最新季報/財報：2026 Q1 EPS約3.24元，年增明顯<br>3. 估值：WantGoo顯示PE約50倍，需搭配全年EPS預估<br>4. 法人籌碼：大型封測權值股，外資/投信方向重要<br>5. 同業比較：Amkor、矽品/封測同業、台積電先進封裝供應鏈"
+  },
+  "2753": {
+    "tagline": "連鎖餐飲與食品工廠模式成熟，EPS與配息穩；估值不貴但成長屬穩健型。",
+    "investorType": "穩定餐飲股利型",
+    "liquidity": { "text": "中", "level": "warn" },
+    "riskTags": [
+      {"text":"餐飲成本", "level":"warn"},
+      {"text":"海外展店", "level":"warn"},
+      {"text":"股利支撐", "level":"good"}
+    ],
+    "signals": {
+      "pe": "WantGoo顯示PE約13.9倍，位於餐飲股合理區間",
+      "chip": "法人參與度中等偏低，較適合看中期基本面與配息",
+      "target": "公開目標價時間序列不足；不把目標價當主要加分依據",
+      "liquidity": "中；Yahoo資料顯示成交金額約0.6億，優於低流動性小型股但非大型權值股"
+    },
+    "next": [
+      "美國展店是否能降低虧損與複製台灣模式。",
+      "原物料、人力與租金是否壓縮毛利率。",
+      "配息率偏高時，現金流與展店資金是否仍充足。"
+    ],
+    "sources": "<b>5項資料來源檢查：</b><br>1. 月營收：2026/4營收年增約7.91%，5月營收創近兩月高<br>2. 最新季報/財報：2026 Q1 EPS年增約21.5%；2025 EPS 12.84元、配息12元<br>3. 估值：WantGoo顯示PE約13.88倍，河流圖約落在12x-16x間<br>4. 法人籌碼：上市餐飲股但法人交易不如大型權值股活躍<br>5. 同業比較：7708全家餐飲、2727王品、築間、乾杯"
+  },
+  "2727": {
+    "tagline": "餐飲龍頭多品牌組合成熟，營運穩定；估值合理但成長與中國事業延續性要觀察。",
+    "investorType": "成熟餐飲龍頭型",
+    "liquidity": { "text": "中", "level": "warn" },
+    "riskTags": [
+      {"text":"中國事業", "level":"warn"},
+      {"text":"餐飲成本", "level":"warn"},
+      {"text":"同業基準", "level":"good"}
+    ],
+    "signals": {
+      "pe": "約13-14倍，餐飲龍頭估值合理偏中性",
+      "chip": "法人籌碼中性，成交量穩定但非高流動性權值股",
+      "target": "公開可見目標價約240元附近；股價接近時上檔空間需保守",
+      "liquidity": "中；Yahoo資料顯示成交金額約1億、成交量約400多張"
+    },
+    "next": [
+      "台灣同店銷售與展店品質是否持續改善。",
+      "中國事業獲利改善是否可延續，不只是短期反彈。",
+      "股價接近目標價時，需檢查是否已反映樂觀預期。"
+    ],
+    "sources": "<b>5項資料來源檢查：</b><br>1. 月營收：2026/3營收約19.62億，年增約7.83%；5月營收年增約15.02%<br>2. 最新季報/財報：2026 Q1營收與EPS創單季新高<br>3. 估值：WantGoo/市場資料顯示PE約13-14倍<br>4. 法人籌碼：上市餐飲龍頭，交易量中等，籌碼需追蹤但非低流動性<br>5. 同業比較：八方雲集、全家餐飲、築間、乾杯"
+  },
+  "3037": {
+    "tagline": "AI伺服器與ABF載板復甦明確，營收與EPS回升；但股價大幅重估後，買點要更嚴格。",
+    "investorType": "AI載板景氣循環型",
+    "liquidity": { "text": "高", "level": "good" },
+    "riskTags": [
+      {"text":"景氣循環", "level":"warn"},
+      {"text":"估值波動", "level":"bad"},
+      {"text":"法人主導", "level":"warn"}
+    ],
+    "signals": {
+      "pe": "近四季PE偏高；若用2026 forward EPS則需看獲利能否兌現",
+      "chip": "法人買賣超波動大，投信與外資方向會明顯影響股價",
+      "target": "多家市場資料顯示目標價被大幅上修，需防股價已提前反映",
+      "liquidity": "高；WantGoo/Yahoo顯示成交量可達數萬張，流動性不是主要風險"
+    },
+    "next": [
+      "2026 EPS是否能達到市場上修後的預估區間。",
+      "ABF載板漲價與T-glass缺料是否持續支撐毛利率。",
+      "高成交量上漲後，若法人轉賣是否形成籌碼壓力。"
+    ],
+    "sources": "<b>5項資料來源檢查：</b><br>1. 月營收：2026/5營收約140.6億，年增32.37%；累計年增26.75%<br>2. 最新季報/財報：2026 Q1 EPS 3.28元，創13季新高<br>3. 估值：近四季PE偏高，forward PE仰賴2026 EPS上修兌現<br>4. 法人籌碼：法人買賣超波動大，需比對股價與買賣超先後<br>5. 同業比較：景碩、南電、臻鼎-KY、ABF載板族群"
   }
 };
 
 STOCKS.forEach(s => Object.assign(s, PRO_DATA[s.code] || {
   tagline: s.verdict,
   investorType: "一般觀察型",
-  liquidity: { text: "待確認", level: "warn" },
+  liquidity: { text: "資料不足", level: "warn" },
   riskTags: [{text:"待補資料",level:"warn"}],
-  signals: { pe:"待確認", chip:"待確認", target:"待確認", liquidity:"待確認" },
+  signals: { pe:"資料不足", chip:"資料不足", target:"資料不足", liquidity:"資料不足" },
   next: ["補齊估值、籌碼、目標價與流動性資料"],
   sources:"公開資料與五星分析報告。"
 }));
@@ -1043,7 +1154,7 @@ function chipHtml(chip) {
 function signalBlockHtml(stock) {
   const s = stock.signals || {};
   const rows = [["本益比",s.pe],["法人籌碼",s.chip],["目標價",s.target],["流動性",s.liquidity]];
-  return `<div class="fsx-signal-grid">${rows.map(([k,v]) => `<div class="fsx-signal"><div class="fsx-signal-k">${k}</div><div class="fsx-signal-v">${v || '待確認'}</div></div>`).join('')}</div>`;
+  return `<div class="fsx-signal-grid">${rows.map(([k,v]) => `<div class="fsx-signal"><div class="fsx-signal-k">${k}</div><div class="fsx-signal-v">${v || '資料不足'}</div></div>`).join('')}</div>`;
 }
 
 // ============ 渲染邏輯 ============
@@ -1102,7 +1213,7 @@ function cardHtml(stock) {
       <div class="fsx-tagline">${stock.tagline || stock.verdict}</div>
       <div class="fsx-card-meta">
         ${chipHtml({text: stock.investorType || "觀察型", level: ""})}
-        ${chipHtml({text: "流動性：" + (stock.liquidity?.text || "待確認"), level: stock.liquidity?.level || ""})}
+        ${chipHtml({text: "流動性：" + (stock.liquidity?.text || "資料不足"), level: stock.liquidity?.level || ""})}
         ${(stock.riskTags || []).slice(0,2).map(chipHtml).join("")}
       </div>
       <div class="fsx-verdict">${stock.verdict}</div>
@@ -1127,7 +1238,7 @@ function detailHtml(stock) {
       <div class="fsx-tagline">${stock.tagline || stock.verdict}</div>
       <div class="fsx-mini-meta">
         <div class="fsx-mini-box"><b>投資人類型</b><span>${stock.investorType || "觀察型"}</span></div>
-        <div class="fsx-mini-box"><b>流動性</b><span>${stock.liquidity?.text || "待確認"}</span></div>
+        <div class="fsx-mini-box"><b>流動性</b><span>${stock.liquidity?.text || "資料不足"}</span></div>
       </div>
       <div class="fsx-card-meta">${(stock.riskTags || []).map(chipHtml).join("")}</div>
 
