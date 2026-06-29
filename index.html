@@ -262,6 +262,7 @@
   width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line);
   background: var(--panel-raised); color: var(--text-primary); font-family: inherit;
   font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+  text-decoration: none; box-sizing: border-box;
 }
 .fsx-download-btn:hover { border-color: var(--cyan); background: rgba(79,195,217,0.08); }
 .fsx-download-btn:active { transform: scale(0.98); }
@@ -1267,95 +1268,15 @@ function detailHtml(stock) {
 
       <div class="fsx-updated">最後更新：${stock.updated}</div>
       ${hasDoc ? `
-      <button class="fsx-download-btn" id="fsx-dl-btn" data-code="${stock.code}">
-        <span>⬇ 下載完整報告 (.docx)</span>
+      <a class="fsx-download-btn" href="reports/${encodeURIComponent(stock.docFilename)}" target="_blank" rel="noopener">
+        <span>📄 開啟完整報告 (.docx)</span>
         <span class="fsx-download-size">${stock.docSizeKb ? stock.docSizeKb + " KB" : ""}</span>
-      </button>
+      </a>
       ` : `
       <p style="font-size:12px; color:var(--text-tertiary); text-align:center; padding:10px 0;">加入交易所模式不產生報告檔案，因此下載按鈕留空。</p>
       `}
     </div>
   `;
-}
-
-function isIOSDevice() {
-  const ua = navigator.userAgent || "";
-  return /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && navigator.maxTouchPoints > 1);
-}
-
-function isAndroidDevice() {
-  return /Android/.test(navigator.userAgent || "");
-}
-
-async function triggerDownload(code) {
-  let doc = await storageGet("doc:" + code);
-  if (!doc) doc = DOCS_DATA[code];
-  if (!doc) return { ok: false, reason: "missing" };
-
-  const mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
-  // --- iOS：絕對不要用 <a download> 去點 data URI／blob URI ---
-  // iOS Safari 對 docx 這類非原生可預覽格式，透過 <a download> 觸發下載時，
-  // 會把它解讀成「要交給其他 App 打開」，於是跳出「正在嘗試開啟外部應用程式」對話框，
-  // 即使按下「允許」，因為裝置上未必有對應 App 接手，畫面只是跳掉、沒有任何檔案被存下來。
-  // 正確作法：用一個隱藏的 <iframe> 承載 data: URI，不離開目前頁面，
-  // 由 Safari 對 iframe 內容的處理機制接手（彈出「在『檔案』中儲存」或預覽分享選單），
-  // 這是 iOS 上對 docx／pdf 等文件下載最常見也最穩定的做法。
-  if (isIOSDevice()) {
-    try {
-      const dataUrl = "data:" + mime + ";base64," + doc.b64;
-      let iframe = document.getElementById("fsx-dl-iframe");
-      if (!iframe) {
-        iframe = document.createElement("iframe");
-        iframe.id = "fsx-dl-iframe";
-        iframe.style.display = "none";
-        document.body.appendChild(iframe);
-      }
-      iframe.src = dataUrl;
-      return { ok: true, mode: "ios-iframe" };
-    } catch (e) {
-      return { ok: false, reason: "ios-exception" };
-    }
-  }
-
-  // --- Android：data URI + <a download> 多數機型可正常運作 ---
-  if (isAndroidDevice()) {
-    try {
-      const dataUrl = "data:" + mime + ";base64," + doc.b64;
-      const a = document.createElement("a");
-      a.href = dataUrl;
-      a.download = doc.filename;
-      a.rel = "noopener";
-      a.style.position = "fixed";
-      a.style.left = "-9999px";
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); }, 1500);
-      return { ok: true, mode: "android-data-uri" };
-    } catch (e) {
-      return { ok: false, reason: "android-exception" };
-    }
-  }
-
-  // --- 桌面瀏覽器：blob + <a download> 最穩定 ---
-  try {
-    const byteChars = atob(doc.b64);
-    const byteNumbers = new Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = doc.filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-    return { ok: true, mode: "blob" };
-  } catch (e) {
-    return { ok: false, reason: "desktop-exception" };
-  }
 }
 
 // ============ 初始化與事件綁定 ============
@@ -1437,26 +1358,6 @@ async function triggerDownload(code) {
     grid.querySelectorAll(".fsx-card").forEach(c => {
       c.classList.toggle("selected", c.dataset.code === code);
     });
-
-    const dlBtn = document.getElementById("fsx-dl-btn");
-    if (dlBtn) {
-      dlBtn.addEventListener("click", async () => {
-        const span = dlBtn.querySelector("span");
-        const originalText = span.textContent;
-        const result = await triggerDownload(code);
-        if (result.ok) {
-          dlBtn.classList.add("fsx-download-done");
-          span.textContent = "✓ 已下載";
-          setTimeout(() => {
-            dlBtn.classList.remove("fsx-download-done");
-            span.textContent = originalText;
-          }, 1800);
-        } else {
-          span.textContent = "下載失敗，請改用電腦開啟";
-          setTimeout(() => { span.textContent = originalText; }, 2500);
-        }
-      });
-    }
   }
 
   function showTooltip(stock, x, y) {
