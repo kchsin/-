@@ -1278,13 +1278,13 @@ function detailHtml(stock) {
   `;
 }
 
-function isMobileDevice() {
-  // 手機瀏覽器（尤其 iOS Safari／LINE／IG 內嵌瀏覽器）對 blob: URL 點擊下載支援不穩定，
-  // 常會被誤判成「嘗試開啟外部應用程式」，跳出允許/不允許對話框後卻沒有實際反應。
+function isIOSDevice() {
   const ua = navigator.userAgent || "";
-  const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && navigator.maxTouchPoints > 1);
-  const isAndroid = /Android/.test(ua);
-  return isIOS || isAndroid;
+  return /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && navigator.maxTouchPoints > 1);
+}
+
+function isAndroidDevice() {
+  return /Android/.test(navigator.userAgent || "");
 }
 
 async function triggerDownload(code) {
@@ -1294,44 +1294,67 @@ async function triggerDownload(code) {
 
   const mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-  if (!isMobileDevice()) {
-    // 桌面瀏覽器：blob + <a download> 最穩定
+  // --- iOS：絕對不要用 <a download> 去點 data URI／blob URI ---
+  // iOS Safari 對 docx 這類非原生可預覽格式，透過 <a download> 觸發下載時，
+  // 會把它解讀成「要交給其他 App 打開」，於是跳出「正在嘗試開啟外部應用程式」對話框，
+  // 即使按下「允許」，因為裝置上未必有對應 App 接手，畫面只是跳掉、沒有任何檔案被存下來。
+  // 正確作法：用一個隱藏的 <iframe> 承載 data: URI，不離開目前頁面，
+  // 由 Safari 對 iframe 內容的處理機制接手（彈出「在『檔案』中儲存」或預覽分享選單），
+  // 這是 iOS 上對 docx／pdf 等文件下載最常見也最穩定的做法。
+  if (isIOSDevice()) {
     try {
-      const byteChars = atob(doc.b64);
-      const byteNumbers = new Array(byteChars.length);
-      for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = doc.filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-      return { ok: true, mode: "blob" };
+      const dataUrl = "data:" + mime + ";base64," + doc.b64;
+      let iframe = document.getElementById("fsx-dl-iframe");
+      if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.id = "fsx-dl-iframe";
+        iframe.style.display = "none";
+        document.body.appendChild(iframe);
+      }
+      iframe.src = dataUrl;
+      return { ok: true, mode: "ios-iframe" };
     } catch (e) {
-      // 失敗的話繼續往下走手機相容路徑，不要直接放棄
+      return { ok: false, reason: "ios-exception" };
     }
   }
 
-  // 手機路徑：用 data: URI 搭配 <a download>，並把連結直接掛在目前頁面（不開新分頁、不用 window.open），
-  // 避免被瀏覽器當成「開啟外部應用程式」的請求。
+  // --- Android：data URI + <a download> 多數機型可正常運作 ---
+  if (isAndroidDevice()) {
+    try {
+      const dataUrl = "data:" + mime + ";base64," + doc.b64;
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = doc.filename;
+      a.rel = "noopener";
+      a.style.position = "fixed";
+      a.style.left = "-9999px";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); }, 1500);
+      return { ok: true, mode: "android-data-uri" };
+    } catch (e) {
+      return { ok: false, reason: "android-exception" };
+    }
+  }
+
+  // --- 桌面瀏覽器：blob + <a download> 最穩定 ---
   try {
-    const dataUrl = "data:" + mime + ";base64," + doc.b64;
+    const byteChars = atob(doc.b64);
+    const byteNumbers = new Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: mime });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = dataUrl;
+    a.href = url;
     a.download = doc.filename;
-    a.rel = "noopener";
-    a.style.position = "fixed";
-    a.style.left = "-9999px";
     document.body.appendChild(a);
     a.click();
-    setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); }, 1500);
-    return { ok: true, mode: "data-uri" };
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    return { ok: true, mode: "blob" };
   } catch (e) {
-    return { ok: false, reason: "exception" };
+    return { ok: false, reason: "desktop-exception" };
   }
 }
 
