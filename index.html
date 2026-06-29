@@ -1278,24 +1278,61 @@ function detailHtml(stock) {
   `;
 }
 
+function isMobileDevice() {
+  // 手機瀏覽器（尤其 iOS Safari／LINE／IG 內嵌瀏覽器）對 blob: URL 點擊下載支援不穩定，
+  // 常會被誤判成「嘗試開啟外部應用程式」，跳出允許/不允許對話框後卻沒有實際反應。
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes("Macintosh") && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(ua);
+  return isIOS || isAndroid;
+}
+
 async function triggerDownload(code) {
   let doc = await storageGet("doc:" + code);
   if (!doc) doc = DOCS_DATA[code];
-  if (!doc) return false;
-  const byteChars = atob(doc.b64);
-  const byteNumbers = new Array(byteChars.length);
-  for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
-  const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = doc.filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
-  return true;
+  if (!doc) return { ok: false, reason: "missing" };
+
+  const mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+  if (!isMobileDevice()) {
+    // 桌面瀏覽器：blob + <a download> 最穩定
+    try {
+      const byteChars = atob(doc.b64);
+      const byteNumbers = new Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = doc.filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      return { ok: true, mode: "blob" };
+    } catch (e) {
+      // 失敗的話繼續往下走手機相容路徑，不要直接放棄
+    }
+  }
+
+  // 手機路徑：用 data: URI 搭配 <a download>，並把連結直接掛在目前頁面（不開新分頁、不用 window.open），
+  // 避免被瀏覽器當成「開啟外部應用程式」的請求。
+  try {
+    const dataUrl = "data:" + mime + ";base64," + doc.b64;
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = doc.filename;
+    a.rel = "noopener";
+    a.style.position = "fixed";
+    a.style.left = "-9999px";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { if (a.parentNode) a.parentNode.removeChild(a); }, 1500);
+    return { ok: true, mode: "data-uri" };
+  } catch (e) {
+    return { ok: false, reason: "exception" };
+  }
 }
 
 // ============ 初始化與事件綁定 ============
@@ -1381,14 +1418,19 @@ async function triggerDownload(code) {
     const dlBtn = document.getElementById("fsx-dl-btn");
     if (dlBtn) {
       dlBtn.addEventListener("click", async () => {
-        const ok = await triggerDownload(code);
-        if (ok) {
+        const span = dlBtn.querySelector("span");
+        const originalText = span.textContent;
+        const result = await triggerDownload(code);
+        if (result.ok) {
           dlBtn.classList.add("fsx-download-done");
-          dlBtn.querySelector("span").textContent = "✓ 已下載";
+          span.textContent = "✓ 已下載";
           setTimeout(() => {
             dlBtn.classList.remove("fsx-download-done");
-            dlBtn.querySelector("span").textContent = "⬇ 下載完整報告 (.docx)";
+            span.textContent = originalText;
           }, 1800);
+        } else {
+          span.textContent = "下載失敗，請改用電腦開啟";
+          setTimeout(() => { span.textContent = originalText; }, 2500);
         }
       });
     }
