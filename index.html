@@ -334,6 +334,11 @@
       <button class="fsx-tab" data-filter="common">普通</button>
     </div>
     <div class="fsx-toolbar-right">
+      <select id="fsx-sort" class="fsx-search" style="min-width:140px;cursor:pointer;">
+        <option value="score">排序：總分↓</option>
+        <option value="updated">排序：更新日期↓</option>
+        <option value="code">排序：代號↑</option>
+      </select>
       <input id="fsx-search" class="fsx-search" type="text" placeholder="搜尋代號或名稱…" />
     </div>
   </div>
@@ -1330,6 +1335,7 @@ function detailHtml(stock) {
 
   let activeFilter = "all";
   let searchTerm = "";
+  let activeSortMode = "score"; // "score" | "updated" | "code"
   let selectedCode = null;
 
   // ---------- 啟動載入：先偵測儲存功能是否可用，再讀儲存、合併、或種子寫入 ----------
@@ -1369,7 +1375,18 @@ function detailHtml(stock) {
         s.code.includes(searchTerm) || s.name.includes(searchTerm);
       return matchFilter && matchSearch;
     }).sort((a, b) => {
-      const diff = totalScore(b) - totalScore(a); // 總分由高到低
+      if (activeSortMode === "updated") {
+        // 更新日期由新到舊；無 updated 欄位的排最後
+        const da = a.updated || "0000-00-00";
+        const db = b.updated || "0000-00-00";
+        if (db !== da) return db.localeCompare(da);
+        return a.code.localeCompare(b.code);
+      }
+      if (activeSortMode === "code") {
+        return a.code.localeCompare(b.code);
+      }
+      // 預設：總分由高到低
+      const diff = totalScore(b) - totalScore(a);
       if (diff !== 0) return diff;
       return a.code.localeCompare(b.code); // 同分時按代號排序，順序穩定不跳動
     });
@@ -1428,6 +1445,12 @@ function detailHtml(stock) {
       activeFilter = tab.dataset.filter;
       render();
     });
+  });
+
+  const sortSelect = document.getElementById("fsx-sort");
+  sortSelect.addEventListener("change", (e) => {
+    activeSortMode = e.target.value;
+    render();
   });
 
   searchInput.addEventListener("input", (e) => {
