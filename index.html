@@ -290,6 +290,36 @@
 .fsx-mini-box span { font-size:12.5px; color:var(--text-primary); }
 .fsx-source { font-size:11px; color:var(--text-tertiary); line-height:1.55; }
 
+/* ---------- 追蹤時間軸 (history) ---------- */
+.fsx-history-item { position:relative; padding:0 0 14px 16px; border-left:2px solid var(--line); margin-left:3px; }
+.fsx-history-item:last-child { padding-bottom:2px; }
+.fsx-history-item::before {
+  content:""; position:absolute; left:-6px; top:2px; width:10px; height:10px; border-radius:50%;
+  background:var(--panel); border:2px solid var(--hist-color, var(--text-tertiary));
+}
+.fsx-history-head { display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap; }
+.fsx-history-date { font-family:"JetBrains Mono", monospace; font-size:11px; color:var(--text-secondary); font-weight:600; }
+.fsx-history-status {
+  font-size:10px; font-weight:700; padding:2px 7px; border-radius:999px; letter-spacing:.02em;
+  color:var(--hist-color, var(--text-tertiary));
+  background:var(--hist-glow, rgba(123,132,153,.12));
+  border:1px solid var(--hist-color, var(--line));
+}
+.fsx-history-trigger { font-size:11px; color:var(--text-tertiary); margin-bottom:5px; }
+.fsx-history-metrics { display:flex; gap:14px; flex-wrap:wrap; font-family:"JetBrains Mono", monospace; font-size:11px; color:var(--text-secondary); margin-bottom:6px; }
+.fsx-history-metrics b { color:var(--text-primary); font-weight:600; }
+.fsx-history-finding { font-size:12px; color:var(--text-primary); line-height:1.6; margin-bottom:6px; }
+.fsx-history-context { font-size:11px; color:var(--text-tertiary); line-height:1.5; margin-bottom:6px; font-style:italic; }
+.fsx-history-sources { display:flex; flex-wrap:wrap; gap:6px; }
+.fsx-history-source-link {
+  font-size:10.5px; color:var(--cyan); text-decoration:none; border-bottom:1px dotted var(--cyan);
+}
+.fsx-history-source-link:hover { opacity:.75; }
+.fsx-history-badge {
+  font-size:10px; padding:2px 6px; border-radius:5px; font-weight:700; color:var(--text-tertiary);
+  border:1px solid var(--line); margin-left:6px;
+}
+
 /* ---------- Scrollbars ---------- */
 .fsx-grid::-webkit-scrollbar, .fsx-detail::-webkit-scrollbar { width: 8px; }
 .fsx-grid::-webkit-scrollbar-thumb, .fsx-detail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
@@ -338,6 +368,7 @@
         <option value="score">排序：總分↓</option>
         <option value="updated">排序：更新日期↓</option>
         <option value="code">排序：代號↑</option>
+        <option value="history">排序：追蹤紀錄↓</option>
       </select>
       <input id="fsx-search" class="fsx-search" type="text" placeholder="搜尋代號或名稱…" />
     </div>
@@ -494,6 +525,22 @@ let STOCKS = [
       { v: 0.5, t: "資本投入策略 — 資源傾斜方向明確但缺乏量化證據" },
     ],
     verdict: "故事性強、確定性低——連法人籌碼都吵不出共識",
+    history: [
+      {
+        date: "2026-07-01",
+        trigger: "股價連續大漲(6/26大盤暴跌後報復性反彈)，主動回頭驗證原本0分判斷是否還成立",
+        priceAtCheck: 4245,
+        peAtCheck: 67.65,
+        marketContext: "台股6/26單日重挫1,683點(史上第三大跌點)，6/29、6/30連續反彈，電子權值股集體回血，此波個股大漲有相當比例是大盤報復性反彈帶動，非純粹個股利多",
+        keyFinding: "本益比67.65倍與原報告查到的70倍區間相近，本質未變；查得融資使用率偏低(1.42%)、籌碼多在法人與大戶手中，但同時個股仍多次出現單日5-10%的暴力漲跌，與原報告「處置股、法人籌碼方向本身分歧」的判斷互相印證。AI ASIC訂單能見度較3個月前提升(已確認第二家雲端大廠訂單)，屬於故事本身在往好方向走，但估值/籌碼風險並未解除。",
+        scoreDeltaNote: null,
+        sources: [
+          {label: "Yahoo股市 2454即時報價", url: "https://tw.stock.yahoo.com/quote/2454.TW"},
+          {label: "Goodinfo 2454新聞列表", url: "https://goodinfo.tw/tw/StockDetail.asp?STOCK_ID=2454"},
+          {label: "CMoney 籌碼與AI ASIC分析", url: "https://www.cmoney.tw/forum/article/176959489"}
+        ]
+      }
+    ],
   },
   {
     code: "5443", name: "均豪", market: "上櫃",
@@ -506,6 +553,23 @@ let STOCKS = [
       { v: 0.5, t: "資本投入策略 — 聯盟策略合理但母公司投入證據有限" },
     ],
     verdict: "母子公司故事落差大——子公司的好消息不等於母公司的好消息",
+    history: [
+      {
+        date: "2026-07-01",
+        trigger: "股價連續2漲(+16.43%)，主動回頭驗證原本財務背離、產業競爭保守的扣分判斷是否還成立",
+        priceAtCheck: 115.5,
+        peAtCheck: 47.81,
+        marketContext: "同期大盤6/26暴跌後6/29-6/30報復性反彈，先進封裝設備族群同步走強，非均豪獨有的個股行情",
+        keyFinding: "這波漲勢的新聞敘事主軸是子公司均華業績亮眼(Q1營收創同期新高、股價一度漲停創新高)，母公司均豪本身財務體質(獲利十季新低、ROE僅1.9%)並無新的實質改善資訊——這正是原報告「重要提醒」點名的母子公司陷阱在實際發生：市場容易把子公司的好消息當成母公司的好消息。本益比47.81倍看似不算誇張，但建立在偏低的獲利基期上，容易失真。",
+        scoreDeltaNote: null,
+        sources: [
+          {label: "Yahoo股市 5443即時報價", url: "https://tw.stock.yahoo.com/quote/5443.TWO"},
+          {label: "Goodinfo 5443新聞列表", url: "https://goodinfo.tw/tw/StockDetail.asp?STOCK_ID=5443"},
+          {label: "CMoney 均豪Q1財報與籌碼分析", url: "https://readmo.cmoney.tw/article/6804b262-29d9-4cf4-bcb9-17bf4f3432c7"},
+          {label: "CMoney 均豪均華母子公司分析", url: "https://readmo.cmoney.tw/article/ebf6c97e-d846-4707-9bab-f6c81aa64048"}
+        ]
+      }
+    ],
   },
   {
     code: "1513", name: "中興電", market: "上市",
@@ -1200,6 +1264,51 @@ function signalBlockHtml(stock) {
   return `<div class="fsx-signal-grid">${rows.map(([k,v]) => `<div class="fsx-signal"><div class="fsx-signal-k">${k}</div><div class="fsx-signal-v">${v || '資料不足'}</div></div>`).join('')}</div>`;
 }
 
+// 追蹤時間軸的驗證狀態 → 顯示文字／顏色
+const HISTORY_STATUS_META = {
+  confirmed:            { label: "理由仍成立",   color: "#4FBE82", glow: "rgba(79,190,130,.14)" },
+  partially_overturned: { label: "部分修正",     color: "#FFD166", glow: "rgba(255,209,102,.14)" },
+  overturned:           { label: "已推翻",       color: "#E0584C", glow: "rgba(224,88,76,.14)" },
+  upgraded:             { label: "評分上修",     color: "#4FC3D9", glow: "rgba(79,195,217,.14)" },
+  downgraded:           { label: "評分下修",     color: "#E0584C", glow: "rgba(224,88,76,.14)" },
+};
+
+function historyHtml(stock) {
+  const list = stock.history || [];
+  if (!list.length) return "";
+  // 由新到舊排序
+  const sorted = [...list].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  const items = sorted.map(h => {
+    const meta = HISTORY_STATUS_META[h.verdictStatus] || { label: h.verdictStatus || "追蹤紀錄", color: "#7B8499", glow: "rgba(123,132,153,.12)" };
+    const metrics = [];
+    if (h.priceAtCheck != null) metrics.push(`股價 <b>${h.priceAtCheck}</b>`);
+    if (h.peAtCheck != null) metrics.push(`本益比 <b>${h.peAtCheck}倍</b>`);
+    const sources = (h.sources || []).map(s =>
+      `<a class="fsx-history-source-link" href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`
+    ).join("");
+    return `
+      <div class="fsx-history-item" style="--hist-color:${meta.color}; --hist-glow:${meta.glow}">
+        <div class="fsx-history-head">
+          <span class="fsx-history-date fsx-mono">${h.date || "日期未記錄"}</span>
+          <span class="fsx-history-status">${meta.label}</span>
+        </div>
+        ${h.trigger ? `<div class="fsx-history-trigger">觸發原因：${h.trigger}</div>` : ""}
+        ${metrics.length ? `<div class="fsx-history-metrics">${metrics.join(" · ")}</div>` : ""}
+        ${h.marketContext ? `<div class="fsx-history-context">大盤背景：${h.marketContext}</div>` : ""}
+        ${h.keyFinding ? `<div class="fsx-history-finding">${h.keyFinding}</div>` : ""}
+        ${h.scoreDeltaNote ? `<div class="fsx-history-finding"><b>分數調整：</b>${h.scoreDeltaNote}</div>` : ""}
+        ${sources ? `<div class="fsx-history-sources">${sources}</div>` : ""}
+      </div>
+    `;
+  }).join("");
+  return `
+    <div class="fsx-section">
+      <div class="fsx-section-title">追蹤時間軸（${list.length}次驗證）</div>
+      ${items}
+    </div>
+  `;
+}
+
 // ============ 渲染邏輯 ============
 
 function totalScore(stock) {
@@ -1251,7 +1360,7 @@ function cardHtml(stock) {
         <span class="fsx-code fsx-mono">${stock.code}</span>
         <span class="fsx-tier-tag ${foilClass}">${tier.name} ${total}★</span>
       </div>
-      <div class="fsx-name">${stock.name} · ${stock.market}</div>
+      <div class="fsx-name">${stock.name} · ${stock.market}${(stock.history && stock.history.length) ? `<span class="fsx-history-badge">已追蹤${stock.history.length}次</span>` : ""}</div>
       <div class="fsx-stars">${renderStars(total, tier)}</div>
       <div class="fsx-tagline">${stock.tagline || stock.verdict}</div>
       <div class="fsx-card-meta">
@@ -1308,6 +1417,8 @@ function detailHtml(stock) {
         <div class="fsx-source">${stock.sources || "公開資料與五星分析報告。"}</div>
       </div>
 
+      ${historyHtml(stock)}
+
       <div class="fsx-updated">最後更新：${stock.updated}</div>
       ${hasDoc ? `
       <a class="fsx-download-btn" href="reports/${encodeURIComponent(stock.docFilename)}" target="_blank" rel="noopener">
@@ -1335,7 +1446,7 @@ function detailHtml(stock) {
 
   let activeFilter = "all";
   let searchTerm = "";
-  let activeSortMode = "score"; // "score" | "updated" | "code"
+  let activeSortMode = "score"; // "score" | "updated" | "code" | "history"
   let selectedCode = null;
 
   // ---------- 啟動載入：先偵測儲存功能是否可用，再讀儲存、合併、或種子寫入 ----------
@@ -1383,6 +1494,17 @@ function detailHtml(stock) {
         return a.code.localeCompare(b.code);
       }
       if (activeSortMode === "code") {
+        return a.code.localeCompare(b.code);
+      }
+      if (activeSortMode === "history") {
+        // 追蹤紀錄次數由多到少；次數相同時比最近一次追蹤日期，越新排越前
+        const ca = (a.history || []).length;
+        const cb = (b.history || []).length;
+        if (cb !== ca) return cb - ca;
+        const latest = s => (s.history || []).reduce((max, h) => (h.date || "") > max ? (h.date || "") : max, "0000-00-00");
+        const la = latest(a);
+        const lb = latest(b);
+        if (lb !== la) return lb.localeCompare(la);
         return a.code.localeCompare(b.code);
       }
       // 預設：總分由高到低
